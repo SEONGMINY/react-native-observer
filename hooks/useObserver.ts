@@ -52,10 +52,31 @@ const useObserver = <
     }
   };
 
+  const cleanupListeners = (key: K) => {
+    const cleanups = invisibleCleanupMap.current.get(key);
+    if (cleanups && cleanups.size > 0) {
+      const cleanupsToRun = new Map(cleanups);
+      invisibleCleanupMap.current.delete(key);
+
+      cleanupsToRun.forEach((cleanup, listener) => {
+        try {
+          if (typeof cleanup === 'function') {
+            cleanup();
+          }
+        } catch (error) {
+          console.error(`[ObserverMap] Error cleaning up listener for key "${String(key)}":`, error);
+        } finally {
+          registerListenerForKey(visibleListenersMap.current, key, listener); // 이름 변경 적용
+        }
+      });
+    }
+  };
+
   return {
     addListener,
     removeListener,
     notifyListeners,
+    cleanupListeners,
   }
 };
 
