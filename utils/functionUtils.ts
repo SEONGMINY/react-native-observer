@@ -1,10 +1,12 @@
-export const invokeSequentially = (...funcs: Array<((...args: unknown[]) => void) | null | undefined>): ((...args: unknown[]) => void) => {
-    return (...args: unknown[]) => {
+export const invokeSequentially = <Args extends unknown[]>(
+    ...funcs: Array<((...args: Args) => void) | null | undefined>
+): ((...args: Args) => void) => {
+    return (...args: Args) => {
         funcs.forEach((func) => {
             try {
                 func?.(...args);
             } catch (error) {
-                console.error("[Observer] Error running function sequentially:", error);
+                console.error("[invokeSequentially] Error running function:", error);
             }
         });
     };
