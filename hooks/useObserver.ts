@@ -51,4 +51,12 @@ const useObserver = <
       });
     }
   };
+
+  return {
+    addListener,
+    removeListener,
+    notifyListeners,
+  }
 };
+
+export default useObserver;
