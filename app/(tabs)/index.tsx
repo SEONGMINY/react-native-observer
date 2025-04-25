@@ -1,21 +1,38 @@
-import { FlatList, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import { ThemedText } from "@/components/ThemedText";
+import {SafeAreaView, StyleSheet, Text, View} from "react-native";
+import ObservedFlatList from "@/components/ObserverFlatList";
+import useInView from "@/hooks/useInView";
+import {ThemedText} from "@/components/ThemedText";
 
 export default function HomeScreen() {
-  const items = new Array(50).fill(null).map((_, index) => `Item ${index + 1}`);
+  const items = new Array(50).fill(null).map((_, index) => ({
+    id: index.toString(),
+    title: `Item ${index + 1}`,
+  }));
 
   return (
     <SafeAreaView>
-      <FlatList data={items} renderItem={({ item }) => <Item title={item} />} />
+      <ObservedFlatList
+          data={items}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => <Item id={item.id} title={item.title} />}
+      />
     </SafeAreaView>
   );
 }
 
-const Item = ({ title }: { title: string }) => {
+const Item = ({ id, title }: { id: string, title: string }) => {
+  useInView(() => {
+    console.log(`${id}가 화면에 나타났어요!`);
+
+    return () => {
+      console.log(`${id}가 화면에서 사라졌어요.`);
+    };
+  }, [id]);
+
   return (
-    <View style={styles.item}>
-      <Text style={styles.title}>{title}</Text>
-    </View>
+      <View style={styles.item}>
+        <Text style={styles.title}>{title}</Text>
+      </View>
   );
 };
 
