@@ -1,4 +1,4 @@
-const registerListenerForKey = <K, Listener>(
+export const registerListenerForKey = <K, Listener>(
   map: Map<K, Set<Listener>>,
   key: K,
   listener: Listener,
@@ -9,7 +9,7 @@ const registerListenerForKey = <K, Listener>(
   map.get(key)!.add(listener);
 };
 
-const unregisterListenerForKey = <K, Listener>(
+export const unregisterListenerForKey = <K, Listener>(
   map: Map<K, Set<Listener>>,
   key: K,
   listener: Listener,
@@ -23,7 +23,7 @@ const unregisterListenerForKey = <K, Listener>(
   }
 };
 
-const registerCleanupForKey = <K, Listener, Cleanup>(
+export const registerCleanupForKey = <K, Listener, Cleanup>(
   map: Map<K, Map<Listener, Cleanup>>,
   key: K,
   listener: Listener,
@@ -35,7 +35,7 @@ const registerCleanupForKey = <K, Listener, Cleanup>(
   map.get(key)!.set(listener, cleanup);
 };
 
-const unregisterCleanupForKey = <K, Listener, Cleanup>(
+export const unregisterCleanupForKey = <K, Listener, Cleanup>(
   map: Map<K, Map<Listener, Cleanup>>,
   key: K,
   listener: Listener,
